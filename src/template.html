@@ -3,9 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>To Do List</title>
 </head>
 <body>
-    
+    <div id="container">
+        <div class="header flex-row">
+            <div class="view">
+                <button id="list-view">
+                    <img class="icon-small" src="assets/icons/view_list.svg" alt="List View">
+                </button>
+                <button id="board-view">
+                    <img class="icon-small" src="assets/icons/view_board.svg" alt="Grid View">
+                </button>
+            </div>
+            <button id="sort">
+                <img class="icon-small" src="assets/icons/sort.svg" alt="Sort">
+                <span>Sort</span>
+            </button>
+        </div>
+        <div class="sidebar flex-col">
+            <button id="profile">
+                <img class="icon-med" src="assets/icons/account.svg" alt="Profile">
+                <span>Username</span>
+            </button>
+            <button id="add-task">
+                <img class="icon-small" src="assets/icons/add_circle.svg" alt="Add Task">
+                <span>Add Task</span>
+            </button>
+            <div class="main-nav flex-col">
+                <button id="today">
+                    <img class="icon-small" src="assets/icons/today.svg" alt="Today">
+                    <span>Today</span>
+                </button>
+                <button id="upcoming">
+                    <img class="icon-small" src="assets/icons/upcoming.svg" alt="Upcoming">
+                    <span>Upcoming</span>
+                </button>
+                <button id="completed">
+                    <img class="icon-small" src="assets/icons/check_nofill.svg" alt="Completed">
+                    <span>Completed</span>
+                </button>
+            </div>
+            <div class="secondary-nav">
+                <h3>My Projects</h3>
+                <div class="project-list flex-col">
+                    <button id="add-project">
+                        <img class="icon-small" src="assets/icons/add.svg" alt="Add Project">
+                        <span>Add Project</span>
+                    </button>
+                </div>
+            </div>
+            <button id="settings">
+                <img class="icon-small" src="assets/icons/settings.svg" alt="Settings">
+                <span>Settings</span>
+            </button>
+        </div>
+        <div class="content">
+            <!-- Task view -->
+        </div>
+    </div>
 </body>
 </html>

@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+
+:root {
+    --primary-color: #77BA99;
+    --secondary-color: #EFF0D1;
+    --text-color: #262730;
+    --secondary-color-light: #F5F5F5;
+    --secondary-color-dark: #D3D3D3;
+}
+
+#container {
+    height: 100vh;
+    display: grid;
+    grid-template-areas:
+        "sidebar header header"
+        "sidebar content content";
+    grid-template-columns: 1fr 4fr;
+    grid-template-rows: 1fr 10fr;
+    font-family: "Manrope", sans-serif;
+}
+
+.sidebar {
+    grid-area: sidebar;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    padding: 1rem;
+}
+
+.header {
+    grid-area: header;
+    background-color: var(--secondary-color);
+    justify-content: flex-end;
+    align-items: center;
+    padding: 1rem;
+}
+
+.content {
+    grid-area: content;
+    background-color: var(--secondary-color);
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+ }
+
+.flex-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.view {
+    display: flex;
+    border-radius: 10px;
+}
+
+.view button {
+    border-radius: 10px;;
+    background-color: var(--secondary-color);
+    border: none;
+    padding: 0.25rem;
+}
+
+.view button:hover {
+    background-color: var(--secondary-color-light);
+}
+
+.header>button {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.header>button:hover {
+    background-color: var(--secondary-color-light);
+}
+
+.sidebar button {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.sidebar button:hover {
+    background-color: var(--secondary-color);
+}
+
+#profile {
+    width: fit-content;
+    font-size: 1.2rem;
+    margin-left: -0.5rem;
+}
+
+#settings {
+    margin-top: auto;
+}
+
+#add-task {
+    background-color: var(--secondary-color-dark);
+}
+
+#add-task:hover {
+    background-color: var(--secondary-color);
+}
+
+img {
+    filter: brightness(0) saturate(100%) invert(16%) sepia(1%) saturate(6264%) hue-rotate(197deg) brightness(89%) contrast(96%);
+}
+
+.icon-small {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.icon-med {
+    width: 2rem;
+    height: 2rem;
+}
