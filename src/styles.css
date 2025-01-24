@@ -62,10 +62,6 @@
     padding: 0.25rem;
 }
 
-.view button:hover {
-    background-color: var(--secondary-color-light);
-}
-
 .header>button {
     background-color: var(--secondary-color);
     color: var(--text-color);
@@ -79,8 +75,9 @@
     font-weight: bold;
 }
 
-.header>button:hover {
+.header button:hover {
     background-color: var(--secondary-color-light);
+    cursor: pointer;
 }
 
 .sidebar button {
