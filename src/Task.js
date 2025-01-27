@@ -7,19 +7,38 @@ export class Task {
         this.project = project;
     }
 
-    setDescription(newDescriptoin){
-        this.description = newDescriptoin;
+    set description(newDescription) {
+        this._description = newDescription;
+    }
+    get description() {
+        return this._description;
     }
 
-    setName(newName){
-        this.name = newName;
+    set name(newName) {
+        this._name = newName;
+    }
+    get name() {
+        return this._name;
     }
 
-    setPriority(newPriority){
-        this.priority = newPriority;
+    set priority(newPriority) {
+        this._priority = newPriority;
+    }
+    get priority() {
+        return this._priority;
     }
 
-    setDueDate(newDueDate){
-        this.dueDate = newDueDate;
+    set dueDate(newDueDate) {
+        this._dueDate = newDueDate;
+    }
+    get dueDate() {
+        return this._dueDate;
+    }
+
+    set project(newProject) {
+        this._project = newProject;
+    }
+    get project() {
+        return this._project;
     }
 }
