@@ -27,8 +27,8 @@ function createElement(type, options = {}) {
     return element;
 }
 
-function createTask(name, description) {
-    const task = createElement("div", {classes: ["task", "flex-row"]})
+function createTask(name, description, priority) {
+    const task = createElement("div", {classes: ["task", "flex-row", `priority-${priority}`]})
 
     const completeButton = createElement("button", {attributes: {id: "complete"}});
     const completeIcon = createElement("img", {classes: ["icon-med"], attributes: {src: checkIcon, alt: "mark complete"}});
@@ -50,7 +50,7 @@ const render = (mode) => {
     const taskList = createElement("div", {classes: ["task-list", "flex-col"]});
     tasks.forEach((taskItem)=>{
         if (mode.evaluate(taskItem)){
-            const task = createTask(taskItem.name, taskItem.description);
+            const task = createTask(taskItem.name, taskItem.description, taskItem.priority);
             taskList.appendChild(task);
         }
     });
