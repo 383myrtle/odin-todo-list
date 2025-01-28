@@ -1,5 +1,6 @@
 import { getTasks, deleteTask } from "./TaskController.js";
 import checkIcon from "./assets/icons/check_nofill.svg";
+import checkFill from "./assets/icons/check_fill.svg";
 import { format } from "date-fns";
 
 const content = document.querySelector(".content");
@@ -28,16 +29,27 @@ function createElement(type, options = {}) {
     return element;
 }
 
-function createTask(name, description, priority, dueDate, mode, index) {
-    const task = createElement("div", {classes: ["task", "flex-row", `priority-${priority}`]})
+function createTask(taskItem, mode, index) {
+    const task = createElement("div", {classes: ["task", "flex-row", `priority-${taskItem.priority}`]})
+    let completeIcon;
 
     const completeButton = createElement("button", {attributes: {id: "complete"}});
-    const completeIcon = createElement("img", {classes: ["icon-med"], attributes: {src: checkIcon, alt: "mark complete"}});
+    if (taskItem.isCompleted()){
+        completeIcon = createElement("img", {classes: ["icon-med"], attributes: {src: checkFill, alt: "mark incomplete"}});
+    }
+    else{
+        completeIcon = createElement("img", {classes: ["icon-med"], attributes: {src: checkIcon, alt: "mark complete"}});
+    }
     completeButton.appendChild(completeIcon);
+    completeButton.addEventListener("click", () => {
+        taskItem.toggleCompleted();
+        completeIcon.src = completeIcon.src === checkIcon ? checkFill : checkIcon;
+        render(mode);
+    });
 
     const taskInfo = createElement("div", {classes: ["task-info"]});
-    const taskTitle = createElement("h2", {text: name});
-    const taskDescription = createElement("p", {text: `Due: ${format(dueDate, 'MMM dd')} · ${description}`});
+    const taskTitle = createElement("h2", {text: taskItem.name});
+    const taskDescription = createElement("p", {text: `Due: ${format(taskItem.dueDate, 'MMM dd')} · ${taskItem.description}`});
     taskInfo.append(taskTitle, taskDescription);
     
     const deleteButton = createElement("button", {text: "x", attributes: {id: "delete"}});
@@ -57,7 +69,7 @@ const render = (mode) => {
     const taskList = createElement("div", {classes: ["task-list", "flex-col"]});
     tasks.forEach((taskItem, index)=>{
         if (mode.evaluate(taskItem)){
-            const task = createTask(taskItem.name, taskItem.description, taskItem.priority, taskItem.dueDate, mode, index);
+            const task = createTask(taskItem, mode, index);
             taskList.appendChild(task);
         }
     });

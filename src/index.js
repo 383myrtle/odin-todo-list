@@ -17,10 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tabs = [
         {id: "today", name: "Today", evaluate: (task) =>{
-            return (isToday(task.dueDate)) ? true : false;
+            return (isToday(task.dueDate) && !task.isCompleted()) ? true : false;
         }},
         {id: "upcoming", name: "Upcoming", evaluate: (task) => {
-            return (isFuture(task.dueDate)) ? true : false;
+            return (isFuture(task.dueDate) && !task.isCompleted()) ? true : false;
         }},
         {id: "completed", name: "Completed", evaluate: (task) => {
             return (task.isCompleted());
