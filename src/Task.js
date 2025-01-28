@@ -5,6 +5,7 @@ export class Task {
         this.dueDate = dueDate;
         this.priority = priority;
         this.project = project;
+        this.completed = false;
     }
 
     set description(newDescription) {
@@ -40,5 +41,13 @@ export class Task {
     }
     get project() {
         return this._project;
+    }
+
+    isCompleted = function() {
+        return this.completed;
+    }
+
+    toggleCompleted = function() {
+        this.completed = this.completed ? false : true;
     }
 }
