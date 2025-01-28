@@ -1,5 +1,6 @@
-import { getTasks } from "./TaskController.js";
+import { getTasks, deleteTask } from "./TaskController.js";
 import checkIcon from "./assets/icons/check_nofill.svg";
+import { format } from "date-fns";
 
 const content = document.querySelector(".content");
 const tasks = getTasks();
@@ -27,7 +28,7 @@ function createElement(type, options = {}) {
     return element;
 }
 
-function createTask(name, description, priority) {
+function createTask(name, description, priority, dueDate, mode, index) {
     const task = createElement("div", {classes: ["task", "flex-row", `priority-${priority}`]})
 
     const completeButton = createElement("button", {attributes: {id: "complete"}});
@@ -36,10 +37,16 @@ function createTask(name, description, priority) {
 
     const taskInfo = createElement("div", {classes: ["task-info"]});
     const taskTitle = createElement("h2", {text: name});
-    const taskDescription = createElement("p", {text: description});
+    const taskDescription = createElement("p", {text: `Due: ${format(dueDate, 'MMM dd')} · ${description}`});
     taskInfo.append(taskTitle, taskDescription);
     
-    task.append(completeButton, taskInfo);
+    const deleteButton = createElement("button", {text: "x", attributes: {id: "delete"}});
+    deleteButton.addEventListener("click", ()=>{
+        deleteTask(index);
+        render(mode);
+    });
+
+    task.append(completeButton, taskInfo, deleteButton);
     return task;
 }
 
@@ -48,9 +55,9 @@ const render = (mode) => {
     clearContent();
     const title = createElement("h1", {text: mode.name})
     const taskList = createElement("div", {classes: ["task-list", "flex-col"]});
-    tasks.forEach((taskItem)=>{
+    tasks.forEach((taskItem, index)=>{
         if (mode.evaluate(taskItem)){
-            const task = createTask(taskItem.name, taskItem.description, taskItem.priority);
+            const task = createTask(taskItem.name, taskItem.description, taskItem.priority, taskItem.dueDate, mode, index);
             taskList.appendChild(task);
         }
     });
