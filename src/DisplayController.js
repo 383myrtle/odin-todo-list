@@ -1,13 +1,16 @@
-import { getTasks, deleteTask } from "./TaskController.js";
+import { getTasks, deleteTask, getProjects, deleteProject } from "./TaskController.js";
 import checkIcon from "./assets/icons/check_nofill.svg";
 import checkFill from "./assets/icons/check_fill.svg";
+import inbox from "./assets/icons/projects.svg";
 import { format } from "date-fns";
 
 const content = document.querySelector(".content");
+const projectList = document.querySelector(".project-list");
 const tasks = getTasks();
+const projects = getProjects();
 
-function clearContent() {
-    content.textContent = "";
+function clearContent(element) {
+    element.textContent = "";
 }
 
 function createElement(type, options = {}) {
@@ -44,7 +47,7 @@ function createTask(taskItem, mode, index) {
     completeButton.addEventListener("click", () => {
         taskItem.toggleCompleted();
         completeIcon.src = completeIcon.src === checkIcon ? checkFill : checkIcon;
-        render(mode);
+        renderTasks(mode);
     });
 
     const taskInfo = createElement("div", {classes: ["task-info"]});
@@ -55,7 +58,7 @@ function createTask(taskItem, mode, index) {
     const deleteButton = createElement("button", {text: "x", attributes: {id: "delete"}});
     deleteButton.addEventListener("click", ()=>{
         deleteTask(index);
-        render(mode);
+        renderTasks(mode);
     });
 
     task.append(completeButton, taskInfo, deleteButton);
@@ -63,8 +66,8 @@ function createTask(taskItem, mode, index) {
 }
 
 
-const render = (mode) => {
-    clearContent();
+const renderTasks = (mode) => {
+    clearContent(content);
     const title = createElement("h1", {text: mode.name})
     const taskList = createElement("div", {classes: ["task-list", "flex-col"]});
     tasks.forEach((taskItem, index)=>{
@@ -76,5 +79,27 @@ const render = (mode) => {
     content.append(title, taskList);
 }
 
-export { render };
+const renderProjects = () => {
+    clearContent(projectList);
+    console.log(projects.toString());
+    projects.forEach((projectItem, index)=>{
+        const project = createElement("button", {attributes: {id: projectItem.id}});
+        const projectIcon = createElement("img", {classes: ["icon-small"], attributes: {src: inbox, alt: "Projects"}});
+        const projectName = createElement("span", {text: projectItem.name});
+        project.append(projectIcon, projectName);
+        
+        if (projectItem.id!=="default"){
+            const deleteButton = createElement("button", {text: "x", attributes: {id: "delete"}});
+            deleteButton.addEventListener("click", ()=>{
+                deleteProject(index);
+                renderProjects();
+            });
+            project.appendChild(deleteButton);
+        }
+        projectList.appendChild(project);
+    });
+    //Add "Add Project" button
+}
+
+export { renderTasks, renderProjects };
 
