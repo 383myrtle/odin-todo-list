@@ -1,8 +1,9 @@
 import { getTasks, deleteTask, getProjects, deleteProject } from "./TaskController.js";
+import { format } from "date-fns";
 import checkIcon from "./assets/icons/check_nofill.svg";
 import checkFill from "./assets/icons/check_fill.svg";
 import inbox from "./assets/icons/projects.svg";
-import { format } from "date-fns";
+import plus from "./assets/icons/add.svg";
 
 const content = document.querySelector(".content");
 const projectList = document.querySelector(".project-list");
@@ -65,6 +66,22 @@ function createTask(taskItem, mode, index) {
     return task;
 }
 
+function createProject(id, name, index){
+    const project = createElement("button", {attributes: {id: id}});
+    const projectIcon = createElement("img", {classes: ["icon-small"], attributes: {src: inbox, alt: "Projects"}});
+    const projectName = createElement("span", {text: name});
+    project.append(projectIcon, projectName);
+    
+    if (id!=="default"){
+        const deleteButton = createElement("button", {text: "x", attributes: {id: "delete"}});
+        deleteButton.addEventListener("click", ()=>{
+            deleteProject(index);
+            renderProjects();
+        });
+        project.appendChild(deleteButton);
+    }
+    return project
+}
 
 const renderTasks = (mode) => {
     clearContent(content);
@@ -83,22 +100,17 @@ const renderProjects = () => {
     clearContent(projectList);
     console.log(projects.toString());
     projects.forEach((projectItem, index)=>{
-        const project = createElement("button", {attributes: {id: projectItem.id}});
-        const projectIcon = createElement("img", {classes: ["icon-small"], attributes: {src: inbox, alt: "Projects"}});
-        const projectName = createElement("span", {text: projectItem.name});
-        project.append(projectIcon, projectName);
-        
-        if (projectItem.id!=="default"){
-            const deleteButton = createElement("button", {text: "x", attributes: {id: "delete"}});
-            deleteButton.addEventListener("click", ()=>{
-                deleteProject(index);
-                renderProjects();
-            });
-            project.appendChild(deleteButton);
-        }
+        const project = createProject(projectItem.id, projectItem.name, index);
         projectList.appendChild(project);
     });
-    //Add "Add Project" button
+    
+    //Add project button
+    const addProjectButton = createElement("button", {attributes:{id:"add-project"}});
+    const addProjectIcon = createElement("img", {classes: ["icon-small"], attributes: {src: plus, alt: "Add project"}});
+    const addProjectText = createElement("span", {text: "Add Project"});
+    addProjectButton.append(addProjectIcon,addProjectText);
+
+    projectList.appendChild(addProjectButton);
 }
 
 export { renderTasks, renderProjects };
