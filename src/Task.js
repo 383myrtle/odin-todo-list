@@ -1,11 +1,11 @@
 export class Task {
-    constructor(name, description, dueDate, priority, project="Default"){
+    constructor(name, description, dueDate, priority, id){
         this.name = name;
         this.description = description;
         this.dueDate = dueDate;
         this.priority = priority;
-        this.project = project;
         this.completed = false;
+        this.id = id;
     }
 
     set description(newDescription) {
@@ -36,11 +36,11 @@ export class Task {
         return this._dueDate;
     }
 
-    set project(newProject) {
-        this._project = newProject;
+    set id(num){
+        this._id = num;
     }
-    get project() {
-        return this._project;
+    get id() {
+        return this._id;
     }
 
     isCompleted = function() {
