@@ -66,13 +66,13 @@ function createTask(taskItem, mode, index) {
     return task;
 }
 
-function createProject(id, name, index){
-    const project = createElement("button", {attributes: {id: id}});
+function createProject(projectItem, index){
+    const project = createElement("button", {attributes: {id: projectItem.id}});
     const projectIcon = createElement("img", {classes: ["icon-small"], attributes: {src: inbox, alt: "Projects"}});
-    const projectName = createElement("span", {text: name});
+    const projectName = createElement("span", {text: projectItem.name});
     project.append(projectIcon, projectName);
     
-    if (id!=="default"){
+    if (projectItem.id!=="default"){
         const deleteButton = createElement("button", {text: "x", attributes: {id: "delete"}});
         deleteButton.addEventListener("click", ()=>{
             deleteProject(index);
@@ -80,6 +80,11 @@ function createProject(id, name, index){
         });
         project.appendChild(deleteButton);
     }
+
+    project.addEventListener("click", () => {
+        renderTasks(projectItem);
+    });
+
     return project
 }
 
@@ -100,7 +105,7 @@ const renderProjects = () => {
     clearContent(projectList);
     console.log(projects.toString());
     projects.forEach((projectItem, index)=>{
-        const project = createProject(projectItem.id, projectItem.name, index);
+        const project = createProject(projectItem, index);
         projectList.appendChild(project);
     });
     
