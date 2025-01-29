@@ -4,7 +4,7 @@ import { Project } from "./Project.js";
 const tasks = [];
 const defaultProject = new Project("Default");
 const projects = [defaultProject];
-const counter = 0;
+let counter = 0;
 
 const addTask = (name, description, dueDate, priority, project = defaultProject) => {
     const task = new Task(name, description, dueDate, priority, counter);
