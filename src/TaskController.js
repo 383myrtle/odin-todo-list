@@ -24,8 +24,10 @@ const getTasks = () => {
 }
 
 const addProject = (name) => {
-    projects.push(new Project(name));
+    const newProject = new Project(name);
+    projects.push(newProject);
     saveToLocalStorage();
+    return newProject;
 }
 
 const deleteProject = (index) => {
