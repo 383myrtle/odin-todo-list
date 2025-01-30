@@ -1,36 +1,32 @@
 export class Project {
     constructor(name, tasks=[]){
         this.name = name;
-        this.id = name;
-        this.projectTasks = tasks;
+        this._projectTasks = tasks;
     }
 
     set name(newName){
         this._name = newName;
+        this._id = newName.toLowerCase().replaceAll(" ", "-");
     }
     get name(){
         return this._name;
     }
 
-    set id(name){
-        this._id = name.toLowerCase().replaceAll(" ", "-");
-    }
     get id(){
         return this._id;
     }
 
-    set projectTasks(tasksArr){
-        this._projectTasks = tasksArr;
-    }
     get projectTasks(){
         return this._projectTasks;
     }
 
     addProjectTask = function(task){
-        this.projectTasks.push(task.id);
+        if (!this._projectTasks.some(t => t.id === task.id)) {
+            this._projectTasks.push(task);
+        }
     }
 
     evaluate = function(task){
-        return (task.id in this.projectTasks);
+        return this._projectTasks.some(t => t.id === task.id);
     }
 }

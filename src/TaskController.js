@@ -41,20 +41,33 @@ const getProjects = () => {
 
 const saveToLocalStorage = () => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
-    localStorage.setItem("projects", JSON.stringify(projects));
+    localStorage.setItem("projects", JSON.stringify(
+        projects.map(project => ({
+            name: project.name,
+            projectTasks: project.projectTasks.map(task => task.id)
+        }))
+    ));
 };
 
 const loadFromLocalStorage = () => {
-    const storedTasks = JSON.parse(localStorage.getItem("tasks"));
-    if (storedTasks) {
-        tasks.length = 0; // Clear array without changing reference
-        storedTasks.forEach(task => tasks.push(Object.assign(new Task(), task)));
-    }
-/*     const storedProjects = JSON.parse(localStorage.getItem("projects"));
-    if (storedProjects) {
+    const storedTasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    tasks.length = 0; // Clear array without changing reference
+    storedTasks.forEach(taskData => {
+        const task = new Task(taskData._name, taskData._description, taskData._dueDate, taskData._priority, taskData._id);
+        tasks.push(task);
+    });
+
+    const storedProjects = JSON.parse(localStorage.getItem("projects"));
+    if (storedProjects){
         projects.length = 0; // Clear array without changing reference
-        storedProjects.forEach(project => projects.push(Object.assign(new Project(project.name, project.tasks))));
+        storedProjects.forEach(projectData => {
+            const project = new Project(
+                projectData.name,
+                projectData.projectTasks.map(taskId => tasks.find(t => t.id === taskId)).filter(task => task !== undefined)
+            )
+            projects.push(project);
+        });
     }
- */};
+};
 
 export { getTasks, addTask, deleteTask, loadFromLocalStorage, getProjects, addProject, deleteProject };
