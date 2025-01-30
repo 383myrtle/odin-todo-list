@@ -63,5 +63,47 @@
             </button>
         </div>
         <div class="content"></div>
+        <dialog id="add-task-dialog">
+            <form id="task-form">
+                <div class="form-header flex-row">
+                    <h2>Add Task</h2>
+                    <button id="close-form">
+                        <img class="icon-small" src="assets/icons/close.svg" alt="Close">
+                    </button>
+                </div>
+                <div class="form-body flex-col">
+                    <div class="form-group">
+                        <label for="task-name">Task Name</label>
+                        <input type="text" id="task-name" name="task-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-date">Due Date</label>
+                        <input type="date" id="task-date" name="task-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-project">Project</label>
+                        <select id="task-project" name="task-project" required>
+                            <option value="" disabled selected>Select Project</option>
+                        </select>   
+                    </div>
+                    <div class="form-group">
+                        <label for="task-priority">Priority</label>
+                        <select id="task-priority" name="task-priority" required>
+                            <option value="" disabled selected>Select Priority</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-description">Description</label>
+                        <textarea id="task-description" name="task-description"></textarea>
+                    </div>
+                </div>
+                <div class="form-footer">
+                    <button id="submit-task" type="submit">Add Task</button>
+                </div>
+            </form>
+        </dialog>
 </body>
 </html>

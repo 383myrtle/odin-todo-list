@@ -1,20 +1,13 @@
 import "./normalize.css";
 import "./styles.css";
-import { addTask, loadFromLocalStorage } from "./TaskController.js";
+import { addTask, addProject, loadFromLocalStorage, getTasks } from "./TaskController.js";
 import { renderTasks, renderProjects } from "./DisplayController.js";
-import { isToday, isFuture } from "date-fns";
+import { isToday, isFuture, parse } from "date-fns";
 
 document.addEventListener("DOMContentLoaded", () => {
     loadFromLocalStorage();
+    console.log(getTasks());
 
-/*     let input = prompt("Enter a task:");
-    while (input !== "q"){
-        let desc = prompt("Enter a description:");
-        addTask(input, desc, new Date(Date.now()), 1);
-        console.log("Task added successfully");
-        input = prompt("Enter a task:")
-    }
- */
     const tabs = [
         {id: "today", name: "Today", evaluate: (task) =>{
             return (isToday(task.dueDate) && !task.isCompleted()) ? true : false;
@@ -31,13 +24,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const tab = document.getElementById(mode.id);
         tab.addEventListener("click", () => {
             const currentTab = document.querySelector(".active");
-            currentTab.classList.remove("active");
+            if (currentTab){
+                currentTab.classList.remove("active");
+            }
             tab.classList.add("active");    
             renderTasks(mode);
         });
     });
 
+    const addTaskButton = document.getElementById("add-task");
+    const dialog = document.getElementById("add-task-dialog");
+    addTaskButton.addEventListener("click", () => {
+        dialog.showModal();
+    });
+
     /* Start on today tab on page load */
     renderTasks(tabs[0]);
     renderProjects();
-})
+});
