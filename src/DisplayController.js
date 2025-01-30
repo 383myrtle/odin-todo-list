@@ -82,6 +82,9 @@ function createProject(projectItem, index){
     }
 
     project.addEventListener("click", () => {
+        const currentTab = document.querySelector(".active");
+        currentTab.classList.remove("active");
+        project.classList.add("active");
         renderTasks(projectItem);
     });
 
