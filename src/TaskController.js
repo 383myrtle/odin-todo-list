@@ -5,14 +5,19 @@ const tasks = [];
 const defaultProject = new Project("Default");
 const projects = [defaultProject];
 let counter = 0;
+const priorityMap = {"high": 1, "medium": 2, "low": 3};
 
 const addTask = (name, description, dueDate, priority, projectName) => {
-    const task = new Task(name, description, dueDate, priority, counter);
+    
+
+    const task = new Task(name, description, dueDate, priorityMap[priority], counter);
     counter++;
     tasks.push(task);
+
     const projectID = projects.find(p => p.name === projectName).id;
     const project = projects.find(p => p.id === projectID);
     project.addProjectTask(task);
+
     saveToLocalStorage();
 }
 
