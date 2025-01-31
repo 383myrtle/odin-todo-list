@@ -1,4 +1,4 @@
-import { getTasks, deleteTask, getProjects, deleteProject } from "./TaskController.js";
+import { getTasks, deleteTask, getProjects, deleteProject, addProject } from "./TaskController.js";
 import { format } from "date-fns";
 import checkIcon from "./assets/icons/check_nofill.svg";
 import checkFill from "./assets/icons/check_fill.svg";
@@ -123,6 +123,12 @@ const renderProjects = () => {
     const addProjectIcon = createElement("img", {classes: ["icon-small"], attributes: {src: plus, alt: "Add project"}});
     const addProjectText = createElement("span", {text: "Add Project"});
     addProjectButton.append(addProjectIcon,addProjectText);
+    addProjectButton.addEventListener("click", () => {
+        console.log("Add project button pressed");
+        const projName = prompt("Enter the project name");
+        addProject(projName);
+        renderProjects();
+    });
 
     projectList.appendChild(addProjectButton);
 
