@@ -6,10 +6,11 @@ const defaultProject = new Project("Default");
 const projects = [defaultProject];
 let counter = 0;
 
-const addTask = (name, description, dueDate, priority, project = defaultProject) => {
+const addTask = (name, description, dueDate, priority, projectID) => {
     const task = new Task(name, description, dueDate, priority, counter);
     counter++;
     tasks.push(task);
+    const project = projects.find(p => p.id === projectID);
     project.addProjectTask(task);
     saveToLocalStorage();
 }

@@ -156,6 +156,7 @@ h2 {
     box-shadow: var(--box-shadow);
     padding: 0.5rem;
     border-radius: 10px;
+    background-color: var(--secondary-color-light);
 }
 
 .task p {
@@ -164,7 +165,7 @@ h2 {
 }
 
 .task button {
-    background-color: var(--secondary-color);
+    background-color: inherit;
     cursor: pointer;
     border: none;
     height: fit-content;

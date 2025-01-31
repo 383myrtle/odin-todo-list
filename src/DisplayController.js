@@ -7,7 +7,6 @@ import plus from "./assets/icons/add.svg";
 
 const content = document.querySelector(".content");
 const projectList = document.querySelector(".project-list");
-const tasks = getTasks();
 const projects = getProjects();
 
 function clearContent(element) {
@@ -95,6 +94,11 @@ function createProject(projectItem, index){
 
 const renderTasks = (mode) => {
     clearContent(content);
+    const tasks = getTasks();
+    tasks.forEach((task) => {
+        console.log(task.name);
+    });
+
     const title = createElement("h1", {text: mode.name})
     const taskList = createElement("div", {classes: ["task-list", "flex-col"]});
     tasks.forEach((taskItem, index)=>{
