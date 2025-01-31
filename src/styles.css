@@ -230,3 +230,15 @@ form button{
 #close-form {
     background-color: var(--secondary-color);
 }
+
+.priority-low img{
+    filter: brightness(0) saturate(100%) invert(35%) sepia(24%) saturate(5474%) hue-rotate(212deg) brightness(91%) contrast(94%);
+}
+
+.priority-medium img{
+    filter: brightness(0) saturate(100%) invert(72%) sepia(96%) saturate(408%) hue-rotate(354deg) brightness(93%) contrast(101%);
+}
+
+.priority-high img{
+    filter: brightness(0) saturate(100%) invert(17%) sepia(49%) saturate(4844%) hue-rotate(351deg) brightness(98%) contrast(100%);;
+}
