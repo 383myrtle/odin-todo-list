@@ -38,12 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitButton = document.getElementById("submit-task");
     const closeDialogButton = document.getElementById("close-form");
 
+    addTaskButton.addEventListener("click", () => dialog.showModal());
+    submitButton.addEventListener("click", (e) => captureTaskDetails(e));
     closeDialogButton.addEventListener("click", (e) =>{
         e.preventDefault();
         dialog.close();
     })
-    submitButton.addEventListener("click", (e) => captureTaskDetails(e));
-    addTaskButton.addEventListener("click", () => dialog.showModal());
 
     /* Start on today tab on page load */
     renderTasks(tabs[0]);
@@ -54,20 +54,21 @@ const captureTaskDetails = (e) => {
     e.preventDefault();
 
     const taskName = document.getElementById("task-name").value;
-    const taskDate = parse(document.getElementById("task-date").value, "yyyy-MM-dd", new Date());
+    const taskDate = document.getElementById("task-date").value;
     const taskProject = document.getElementById("task-project").value;
     const taskPriority = document.getElementById("task-priority").value;
     const taskDescription = document.getElementById("task-description").value;
 
-    if (!(taskPriority && taskProject)){
-        alert("Select a project and priority");
+    if (!(taskPriority && taskProject && taskDate)){
+        alert("Select a project, priority, and due date");
         return;
     }
-    addTask(taskName, taskDescription, taskDate, taskPriority, taskProject);
-    console.log(getTasks());
+    addTask(taskName, taskDescription, parse(taskDate, "yyyy-MM-dd", new Date()), taskPriority, taskProject);
+
+    const form = document.querySelector("form");
+    form.reset();
 
     const currentMode = tabs.find(t => t.id === document.querySelector(".active").id) || tabs[0];
-    console.log(`Current mode: ${currentMode.id}`);
     renderTasks(currentMode);
     dialog.close();
 }
