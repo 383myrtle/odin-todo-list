@@ -126,8 +126,10 @@ const renderProjects = () => {
     addProjectButton.addEventListener("click", () => {
         console.log("Add project button pressed");
         const projName = prompt("Enter the project name");
-        addProject(projName);
-        renderProjects();
+        if (projName){
+            addProject(projName);
+            renderProjects();
+        }
     });
 
     projectList.appendChild(addProjectButton);
