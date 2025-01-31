@@ -125,6 +125,12 @@ const renderProjects = () => {
     addProjectButton.append(addProjectIcon,addProjectText);
 
     projectList.appendChild(addProjectButton);
+
+    const projectSelection = document.getElementById("task-project");
+    projects.forEach((project) => {
+        const option = createElement("option", {text: project.name, attributes: {value: project.name}});
+        projectSelection.appendChild(option);
+    });
 }
 
 export { renderTasks, renderProjects };

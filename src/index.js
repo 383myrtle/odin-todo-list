@@ -1,6 +1,6 @@
 import "./normalize.css";
 import "./styles.css";
-import { addTask, addProject, loadFromLocalStorage, getTasks } from "./TaskController.js";
+import { addTask, addProject, loadFromLocalStorage, getTasks, getProjects } from "./TaskController.js";
 import { renderTasks, renderProjects } from "./DisplayController.js";
 import { isToday, isFuture, parse } from "date-fns";
 
@@ -22,7 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
     loadFromLocalStorage();
     console.log(getTasks());
 
-    
     tabs.forEach((mode) => {
         const tab = document.getElementById(mode.id);
         tab.addEventListener("click", () => {
@@ -38,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const addTaskButton = document.getElementById("add-task");
     const submitButton = document.getElementById("submit-task");
     const closeDialogButton = document.getElementById("close-form");
+
     closeDialogButton.addEventListener("click", (e) =>{
         e.preventDefault();
         dialog.close();
@@ -59,6 +59,10 @@ const captureTaskDetails = (e) => {
     const taskPriority = document.getElementById("task-priority").value;
     const taskDescription = document.getElementById("task-description").value;
 
+    if (!(taskPriority && taskProject)){
+        alert("Select a project and priority");
+        return;
+    }
     addTask(taskName, taskDescription, taskDate, taskPriority, taskProject);
     console.log(getTasks());
 
