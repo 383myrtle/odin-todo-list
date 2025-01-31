@@ -37,6 +37,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const addTaskButton = document.getElementById("add-task");
     const submitButton = document.getElementById("submit-task");
+    const closeDialogButton = document.getElementById("close-form");
+    closeDialogButton.addEventListener("click", (e) =>{
+        e.preventDefault();
+        dialog.close();
+    })
     submitButton.addEventListener("click", (e) => captureTaskDetails(e));
     addTaskButton.addEventListener("click", () => dialog.showModal());
 
