@@ -39,6 +39,7 @@ const addProject = (name) => {
 }
 
 const deleteProject = (index) => {
+    projects[index]._projectTasks.forEach(task => deleteTask(task));
     projects.splice(index, 1);
     saveToLocalStorage();
 }

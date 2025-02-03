@@ -75,7 +75,6 @@ function createProject(projectItem, index){
         const deleteButton = createElement("button", {text: "x", attributes: {id: "delete"}});
         deleteButton.addEventListener("click", (e)=>{
             e.stopPropagation();
-            projects[index].removeAllTasks();
             deleteProject(index);
             renderProjects();
         });
