@@ -1,3 +1,5 @@
+import { deleteTask } from "./TaskController";
+
 export class Project {
     constructor(name, tasks=[]){
         this.name = name;
@@ -24,6 +26,10 @@ export class Project {
         if (!this._projectTasks.some(t => t.id === task.id)) {
             this._projectTasks.push(task);
         }
+    }
+
+    removeAllTasks = function(){
+        this._projectTasks.forEach(task => deleteTask(task));
     }
 
     evaluate = function(task){
