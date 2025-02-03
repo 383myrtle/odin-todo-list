@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         dialog.close();
     });
-    sortButton.addEventListener("click", () => sortDialog.showModal());
+    sortButton.addEventListener("click", () => sortDialog.show());
     sortSelect.addEventListener("change", () => {
         const sortMode = sortSelect.value;
         sort(sortMode);
@@ -56,6 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sortSelect.selectedIndex = 0;
         sortDialog.close();
     });
+    sortDialog.addEventListener("focusout", () => sortDialog.close());
 
     /* Start on today tab on page load */
     renderTasks(tabs[0]);
