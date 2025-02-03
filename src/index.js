@@ -1,6 +1,6 @@
 import "./normalize.css";
 import "./styles.css";
-import { addTask, addProject, loadFromLocalStorage, getTasks, getProjects } from "./TaskController.js";
+import { addTask, sort, loadFromLocalStorage, getTasks, getProjects } from "./TaskController.js";
 import { renderTasks, renderProjects } from "./DisplayController.js";
 import { isToday, isFuture, parse } from "date-fns";
 
@@ -37,13 +37,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const addTaskButton = document.getElementById("add-task");
     const submitButton = document.getElementById("submit-task");
     const closeDialogButton = document.getElementById("close-form");
+    const sortButton = document.getElementById("sort");
+    const sortSelect = document.getElementById("sort-select");
+    const sortDialog = document.getElementById("sort-dialog");
 
     addTaskButton.addEventListener("click", () => dialog.showModal());
     submitButton.addEventListener("click", (e) => captureTaskDetails(e));
     closeDialogButton.addEventListener("click", (e) =>{
         e.preventDefault();
         dialog.close();
-    })
+    });
+    sortButton.addEventListener("click", () => sortDialog.showModal());
+    sortSelect.addEventListener("change", () => {
+        const sortMode = sortSelect.value;
+        sort(sortMode);
+        const currentMode = tabs.find(t => t.id === document.querySelector(".active").id) || tabs[0];
+        renderTasks(currentMode);
+        sortSelect.selectedIndex = 0;
+        sortDialog.close();
+    });
 
     /* Start on today tab on page load */
     renderTasks(tabs[0]);

@@ -179,6 +179,7 @@ button.active {
 #delete {
     margin-left: auto;
     margin-right: 2rem;
+    background-color: inherit;
 }
 
 dialog {
@@ -241,4 +242,10 @@ form button{
 
 .priority-1 img{
     filter: brightness(0) saturate(100%) invert(17%) sepia(49%) saturate(4844%) hue-rotate(351deg) brightness(98%) contrast(100%);;
+}
+
+dialog#sort-dialog {
+    width: fit-content;
+    margin-left: 87%;
+    margin-top: 50px;
 }

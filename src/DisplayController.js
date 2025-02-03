@@ -32,7 +32,7 @@ function createElement(type, options = {}) {
     return element;
 }
 
-function createTask(taskItem, mode, index) {
+function createTask(taskItem, mode) {
     const task = createElement("div", {classes: ["task", "flex-row", `priority-${taskItem.priority}`]})
     let completeIcon;
 
@@ -57,7 +57,7 @@ function createTask(taskItem, mode, index) {
     
     const deleteButton = createElement("button", {text: "x", attributes: {id: "delete"}});
     deleteButton.addEventListener("click", ()=>{
-        deleteTask(index);
+        deleteTask(taskItem);
         renderTasks(mode);
     });
 
@@ -73,7 +73,9 @@ function createProject(projectItem, index){
     
     if (projectItem.id!=="default"){
         const deleteButton = createElement("button", {text: "x", attributes: {id: "delete"}});
-        deleteButton.addEventListener("click", ()=>{
+        deleteButton.addEventListener("click", (e)=>{
+            e.stopPropagation();
+            projects[index].removeAllTasks();
             deleteProject(index);
             renderProjects();
         });
@@ -101,9 +103,9 @@ const renderTasks = (mode) => {
 
     const title = createElement("h1", {text: mode.name})
     const taskList = createElement("div", {classes: ["task-list", "flex-col"]});
-    tasks.forEach((taskItem, index)=>{
+    tasks.forEach((taskItem)=>{
         if (mode.evaluate(taskItem)){
-            const task = createTask(taskItem, mode, index);
+            const task = createTask(taskItem, mode);
             taskList.appendChild(task);
         }
     });
@@ -135,6 +137,8 @@ const renderProjects = () => {
     projectList.appendChild(addProjectButton);
 
     const projectSelection = document.getElementById("task-project");
+    clearContent(projectSelection);
+    projectSelection.appendChild(createElement("option", {text: "Select project", attributes: {value: "", disabled: true, selected: true}}));
     projects.forEach((project) => {
         const option = createElement("option", {text: project.name, attributes: {value: project.name}});
         projectSelection.appendChild(option);

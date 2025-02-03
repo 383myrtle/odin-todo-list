@@ -1,5 +1,6 @@
 import { Task } from "./Task.js";
 import { Project } from "./Project.js";
+import { compareAsc } from "date-fns";
 
 const tasks = [];
 const defaultProject = new Project("Default");
@@ -8,8 +9,6 @@ let counter = 0;
 const priorityMap = {"high": 1, "medium": 2, "low": 3};
 
 const addTask = (name, description, dueDate, priority, projectName) => {
-    
-
     const task = new Task(name, description, dueDate, priorityMap[priority], counter);
     counter++;
     tasks.push(task);
@@ -21,7 +20,9 @@ const addTask = (name, description, dueDate, priority, projectName) => {
     saveToLocalStorage();
 }
 
-const deleteTask = (index) => {
+const deleteTask = (task) => {
+    const thisTask = tasks.find(t => t.id === task.id);
+    const index = tasks.indexOf(thisTask);
     tasks.splice(index, 1);
     saveToLocalStorage();
 }
@@ -44,6 +45,19 @@ const deleteProject = (index) => {
 
 const getProjects = () => {
     return projects;
+}
+
+const sort = (sortingMode) => {
+    switch (sortingMode){
+        case "name":
+            tasks.sort((a,b) => a.name.localeCompare(b.name));
+            break;
+        case "priority":
+            tasks.sort((a,b) => a.priority - b.priority);
+            break;
+        case "date":
+            tasks.sort((a,b) => compareAsc(a.dueDate, b.dueDate));
+    }
 }
 
 const saveToLocalStorage = () => {
@@ -77,4 +91,4 @@ const loadFromLocalStorage = () => {
     }
 };
 
-export { getTasks, addTask, deleteTask, loadFromLocalStorage, getProjects, addProject, deleteProject };
+export { getTasks, addTask, deleteTask, loadFromLocalStorage, getProjects, addProject, deleteProject, sort };
