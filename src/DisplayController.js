@@ -66,7 +66,7 @@ function createTask(taskItem, mode) {
 }
 
 function createProject(projectItem, index){
-    const project = createElement("button", {attributes: {id: projectItem.id}});
+    const project = createElement("button", {classes: ["flex-row"], attributes: {id: projectItem.id}});
     const projectIcon = createElement("img", {classes: ["icon-small"], attributes: {src: inbox, alt: "Projects"}});
     const projectName = createElement("span", {text: projectItem.name});
     project.append(projectIcon, projectName);
@@ -120,7 +120,7 @@ const renderProjects = () => {
     });
     
     //Add project button
-    const addProjectButton = createElement("button", {attributes:{id:"add-project"}});
+    const addProjectButton = createElement("button", {classes: ["flex-row"], attributes:{id:"add-project"}});
     const addProjectIcon = createElement("img", {classes: ["icon-small"], attributes: {src: plus, alt: "Add project"}});
     const addProjectText = createElement("span", {text: "Add Project"});
     addProjectButton.append(addProjectIcon,addProjectText);

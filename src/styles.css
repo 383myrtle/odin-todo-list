@@ -10,6 +10,12 @@
     --box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.1);
 }
 
+* {
+    color: var(--text-color);
+}
+
+/* Layout */
+
 #container {
     height: 100vh;
     display: grid;
@@ -24,7 +30,6 @@
 .sidebar {
     grid-area: sidebar;
     background-color: var(--primary-color);
-    color: var(--text-color);
     padding: 1rem;
 }
 
@@ -39,8 +44,10 @@
 .content {
     grid-area: content;
     background-color: var(--secondary-color);
+    padding: 1rem;
 }
 
+/* Function classes */
 .flex-col {
     display: flex;
     flex-direction: column;
@@ -49,54 +56,44 @@
 
 .flex-row {
     display: flex;
-    gap: 1rem;
-}
-
-.view {
-    display: flex;
-    border-radius: 10px;
-}
-
-.view button {
-    border-radius: 10px;;
-    background-color: var(--secondary-color);
-    border: none;
-    padding: 0.25rem;
-}
-
-.header>button {
-    background-color: var(--secondary-color);
-    color: var(--text-color);
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
     gap: 0.5rem;
-    border-radius: 10px;
-    font-weight: bold;
+    align-items: center;
 }
 
-.header button:hover {
+/* Global styles section */
+
+button {
+    border: none;
+    border-radius: 10px;;
+    padding: 0.5rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#delete {
+    margin-left: auto;
+    margin-right: 2rem;
+    background-color: inherit;
+}
+
+/* Header and sidebar section */
+.header button{
+    background-color: var(--secondary-color);
+}
+
+.header button:hover,
+.sidebar button:hover {
     background-color: var(--secondary-color-light);
     cursor: pointer;
 }
 
 .sidebar button {
     background-color: var(--primary-color);
-    color: var(--text-color);
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-radius: 10px;
-    font-weight: bold;
 }
 
-.sidebar button:hover {
+button.active {
     background-color: var(--secondary-color);
+    font-weight: 1000;
 }
 
 #profile {
@@ -117,6 +114,7 @@
     background-color: var(--secondary-color);
 }
 
+/* Images and icons section */
 img {
     filter: brightness(0) saturate(100%) invert(16%) sepia(1%) saturate(6264%) hue-rotate(197deg) brightness(89%) contrast(96%);
 }
@@ -131,11 +129,7 @@ img {
     height: 2rem;
 }
 
-.content {
-    padding: 1rem;
-    color: var(--text-color);
-}
-
+/* Tasks section */
 h1 {
     font-size: 2.5rem;
     font-weight: bold;
@@ -144,7 +138,6 @@ h1 {
 
 .task-list {
     padding: 2rem 0px;
-    gap: 1rem;
 }
 
 h2 {
@@ -152,11 +145,10 @@ h2 {
 }
 
 .task {
-    align-items: center;
+    background-color: var(--secondary-color-light);
     box-shadow: var(--box-shadow);
     padding: 0.5rem;
     border-radius: 10px;
-    background-color: var(--secondary-color-light);
 }
 
 .task p {
@@ -166,27 +158,27 @@ h2 {
 
 .task button {
     background-color: inherit;
-    cursor: pointer;
-    border: none;
     height: fit-content;
 }
 
-button.active {
-    background-color: var(--secondary-color);
-    font-weight: 1000;
+.priority-3 img{
+    filter: brightness(0) saturate(100%) invert(35%) sepia(24%) saturate(5474%) hue-rotate(212deg) brightness(91%) contrast(94%);
 }
 
-#delete {
-    margin-left: auto;
-    margin-right: 2rem;
-    background-color: inherit;
+.priority-2 img{
+    filter: brightness(0) saturate(100%) invert(72%) sepia(96%) saturate(408%) hue-rotate(354deg) brightness(93%) contrast(101%);
 }
+
+.priority-1 img{
+    filter: brightness(0) saturate(100%) invert(17%) sepia(49%) saturate(4844%) hue-rotate(351deg) brightness(98%) contrast(100%);;
+}
+
+/* Dialog and form section */
 
 dialog {
     border-radius: 10px;
     padding: 2rem;
     background-color: var(--secondary-color);
-    color: var(--text-color);
     width: 50%;
     height: fit-content;
 }
@@ -222,7 +214,6 @@ form button{
     padding: 0.5rem;
     border: none;
     background-color: var(--tertiary-color);
-    color: var(--text-color);
     border-radius: 5px;
     font-weight: bold;
     cursor: pointer;
@@ -230,18 +221,6 @@ form button{
 
 #close-form {
     background-color: var(--secondary-color);
-}
-
-.priority-3 img{
-    filter: brightness(0) saturate(100%) invert(35%) sepia(24%) saturate(5474%) hue-rotate(212deg) brightness(91%) contrast(94%);
-}
-
-.priority-2 img{
-    filter: brightness(0) saturate(100%) invert(72%) sepia(96%) saturate(408%) hue-rotate(354deg) brightness(93%) contrast(101%);
-}
-
-.priority-1 img{
-    filter: brightness(0) saturate(100%) invert(17%) sepia(49%) saturate(4844%) hue-rotate(351deg) brightness(98%) contrast(100%);;
 }
 
 dialog#sort-dialog {
