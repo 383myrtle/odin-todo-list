@@ -1,87 +1,78 @@
 import "./normalize.css";
 import "./styles.css";
 import { addTask, sort, loadFromLocalStorage, getTasks, getProjects } from "./TaskController.js";
-import { renderTasks, renderProjects } from "./DisplayController.js";
-import { isToday, isFuture, parse } from "date-fns";
+import { renderTasks, renderProjects, setUpTabs, renderCurrentTab } from "./DisplayController.js";
+import { parse } from "date-fns";
 
-const dialog = document.getElementById("add-task-dialog");
-const tabs = [
-    {id: "today", name: "Today", evaluate: (task) =>{
-        console.log(`Name: ${task.name}. Due date: ${task.dueDate}. Completed: ${task.isCompleted()}`);
-        return (isToday(task.dueDate) && !task.isCompleted()) ? true : false;
-    }},
-    {id: "upcoming", name: "Upcoming", evaluate: (task) => {
-        return (isFuture(task.dueDate) && !task.isCompleted()) ? true : false;
-    }},
-    {id: "completed", name: "Completed", evaluate: (task) => {
-        return (task.isCompleted());
-    }},
-];
+const addTaskDialog = document.getElementById("add-task-dialog");
+const sortDialog = document.getElementById("sort-dialog");
 
 document.addEventListener("DOMContentLoaded", () => {
     loadFromLocalStorage();
-    console.log(getTasks());
+    setUpTabs();
+    setUpEventListeners();
 
-    tabs.forEach((mode) => {
-        const tab = document.getElementById(mode.id);
-        tab.addEventListener("click", () => {
-            const currentTab = document.querySelector(".active");
-            if (currentTab){
-                currentTab.classList.remove("active");
-            }
-            tab.classList.add("active");    
-            renderTasks(mode);
-        });
-    });
-
-    const addTaskButton = document.getElementById("add-task");
-    const submitButton = document.getElementById("submit-task");
-    const closeDialogButton = document.getElementById("close-form");
-    const sortButton = document.getElementById("sort");
-    const sortSelect = document.getElementById("sort-select");
-    const sortDialog = document.getElementById("sort-dialog");
-
-    addTaskButton.addEventListener("click", () => dialog.showModal());
-    submitButton.addEventListener("click", (e) => captureTaskDetails(e));
-    closeDialogButton.addEventListener("click", (e) =>{
-        e.preventDefault();
-        dialog.close();
-    });
-    sortButton.addEventListener("click", () => sortDialog.show());
-    sortSelect.addEventListener("change", () => {
-        const sortMode = sortSelect.value;
-        sort(sortMode);
-        const currentMode = tabs.find(t => t.id === document.querySelector(".active").id) || tabs[0];
-        renderTasks(currentMode);
-        sortSelect.selectedIndex = 0;
-        sortDialog.close();
-    });
-    sortDialog.addEventListener("focusout", () => sortDialog.close());
-
-    /* Start on today tab on page load */
-    renderTasks(tabs[0]);
+    renderCurrentTab(); // Start on Today tab
     renderProjects();
 });
 
-const captureTaskDetails = (e) => {
+function captureTaskDetails(e) {
     e.preventDefault();
-
-    const taskName = document.getElementById("task-name").value;
-    const taskDate = document.getElementById("task-date").value;
-    const taskProject = document.getElementById("task-project").value;
-    const taskPriority = document.getElementById("task-priority").value;
-    const taskDescription = document.getElementById("task-description").value;
-
-    if (!(taskPriority && taskProject && taskDate)){
-        alert("Select a project, priority, and due date");
-        return;
-    }
-    addTask(taskName, taskDescription, parse(taskDate, "yyyy-MM-dd", new Date()), taskPriority, taskProject);
-
     const form = document.querySelector("form");
-    form.reset();
+    const taskDetails = getTaskDetails();
 
-    const currentMode = tabs.find(t => t.id === document.querySelector(".active").id) || tabs[0];
-    renderTasks(currentMode);
-    dialog.close();
+    if (validateTask(taskDetails)){
+        addTask(taskDetails.name, taskDetails.description, parse(taskDetails.date, "yyyy-MM-dd", new Date()), taskDetails.priority, taskDetails.project);
+        form.reset();
+        renderCurrentTab();
+        closeDialog(e);
+    }
+    else {
+        const errorMsg = document.createElement("div")
+        errorMsg.textContent = "Error, please complete all fields";
+        form.appendChild(errorMsg);
+    }
+}
+
+function validateTask(taskDetails){
+    return (taskDetails.date && taskDetails.project && taskDetails.priority);
+}
+
+function getTaskDetails() {
+    const {value: name} = document.getElementById("task-name");
+    const {value: date} = document.getElementById("task-date");
+    const {value: project} = document.getElementById("task-project");
+    const {value: priority} = document.getElementById("task-priority");
+    const {value: description} = document.getElementById("task-description");
+
+    return { name, date, project, priority, description }
+}
+
+function setUpEventListeners(){
+    const addTaskButton = document.getElementById("add-task");
+    const submitTaskButton = document.getElementById("submit-task");
+    const closeTaskDialogButton = document.getElementById("close-form");
+    const sortButton = document.getElementById("sort");
+    const sortSelect = document.getElementById("sort-select");
+
+    addTaskButton.addEventListener("click", () => addTaskDialog.showModal());
+    submitTaskButton.addEventListener("click", (e) => captureTaskDetails(e));
+    closeTaskDialogButton.addEventListener("click", (e) => closeDialog(e));
+
+    sortButton.addEventListener("click", () => sortDialog.show());
+    sortSelect.addEventListener("change", handleSort);
+    sortDialog.addEventListener("focusout", () => sortDialog.close());
+}
+
+function handleSort() {
+    const sortSelect = document.getElementById("sort-select");
+    sort(sortSelect.value);
+    sortSelect.selectedIndex = 0;
+    renderCurrentTab();
+    sortDialog.close();
+}
+
+function closeDialog(e) {
+    e.preventDefault();
+    e.target.closest("dialog").close();
 }

@@ -1,6 +1,7 @@
 import { getTasks, deleteTask, getProjects, deleteProject, addProject } from "./TaskController.js";
 import { format } from "date-fns";
-import checkIcon from "./assets/icons/check_nofill.svg";
+import { isToday, isFuture } from "date-fns";
+import checkNoFill from "./assets/icons/check_nofill.svg";
 import checkFill from "./assets/icons/check_fill.svg";
 import inbox from "./assets/icons/projects.svg";
 import plus from "./assets/icons/add.svg";
@@ -8,6 +9,65 @@ import plus from "./assets/icons/add.svg";
 const content = document.querySelector(".content");
 const projectList = document.querySelector(".project-list");
 const projects = getProjects();
+const tasks = getTasks();
+const tabs = [
+    {id: "today", name: "Today", evaluate: (task) =>{
+        return (isToday(task.dueDate) && !task.isCompleted());
+    }},
+    {id: "upcoming", name: "Upcoming", evaluate: (task) => {
+        return (isFuture(task.dueDate) && !task.isCompleted());
+    }},
+    {id: "completed", name: "Completed", evaluate: (task) => {
+        return (task.isCompleted());
+    }},
+];
+
+const renderTasks = (mode) => {
+    clearContent(content);
+    const title = createElement("h1", {text: mode.name})
+    const taskList = createElement("div", {classes: ["task-list", "flex-col"]});
+    tasks.forEach((taskItem)=>{
+        if (mode.evaluate(taskItem)){
+            const task = createTask(taskItem, mode);
+            taskList.appendChild(task);
+        }
+    });
+    content.append(title, taskList);
+}
+
+const renderProjects = () => {
+    clearContent(projectList);
+    projects.forEach((projectItem, index)=>{
+        const project = createProject(projectItem, index);
+        projectList.appendChild(project);
+    });
+    const addProjectButton = createAddProjectButton();
+    projectList.appendChild(addProjectButton);
+    renderProjectSelection();
+}
+
+const setUpTabs = () => {
+    tabs.forEach((mode) => {
+        const tab = document.getElementById(mode.id);
+        tab.addEventListener("click", () => {
+            setActive(tab);
+            renderTasks(mode);
+        });
+    });
+}
+
+const renderCurrentTab = () => {
+    const currentMode = tabs.find(t => t.id === document.querySelector(".active")?.id) || projects.find(p => p.id === document.querySelector(".active")?.id) || tabs[0];
+    renderTasks(currentMode);
+}
+
+function setActive(element) {
+    const currentTab = document.querySelector(".active");
+    if (currentTab){
+        currentTab.classList.remove("active");
+    }
+    element.classList.add("active");
+}
 
 function clearContent(element) {
     element.textContent = "";
@@ -19,11 +79,9 @@ function createElement(type, options = {}) {
     if (options.classes){ // array of strings
         element.classList.add(...options.classes);
     }
-
     if (options.text){ // string
         element.textContent = options.text;
     }
-
     if (options.attributes){ // object in the form {attribute: value}
         Object.entries(options.attributes).forEach(([key, value]) => {
             element.setAttribute(key, value);
@@ -32,23 +90,23 @@ function createElement(type, options = {}) {
     return element;
 }
 
-function createTask(taskItem, mode) {
-    const task = createElement("div", {classes: ["task", "flex-row", `priority-${taskItem.priority}`]})
+function createCompleteButton(taskItem) {
     let completeIcon;
-
+    const source = taskItem.isCompleted() ? checkFill : checkNoFill;
     const completeButton = createElement("button", {attributes: {id: "complete"}});
-    if (taskItem.isCompleted()){
-        completeIcon = createElement("img", {classes: ["icon-med"], attributes: {src: checkFill, alt: "mark incomplete"}});
-    }
-    else{
-        completeIcon = createElement("img", {classes: ["icon-med"], attributes: {src: checkIcon, alt: "mark complete"}});
-    }
+    completeIcon = createElement("img", {classes: ["icon-med"], attributes: {src: source, alt: "toggle complete"}});
     completeButton.appendChild(completeIcon);
+
     completeButton.addEventListener("click", () => {
         taskItem.toggleCompleted();
-        completeIcon.src = completeIcon.src === checkIcon ? checkFill : checkIcon;
-        renderTasks(mode);
+        renderCurrentTab();
     });
+    return completeButton;
+}
+
+function createTask(taskItem, mode) {
+    const task = createElement("div", {classes: ["task", "flex-row", `priority-${taskItem.priority}`]})
+    const completeButton = createCompleteButton(taskItem);
 
     const taskInfo = createElement("div", {classes: ["task-info"]});
     const taskTitle = createElement("h2", {text: taskItem.name});
@@ -82,50 +140,20 @@ function createProject(projectItem, index){
     }
 
     project.addEventListener("click", () => {
-        const currentTab = document.querySelector(".active");
-        if (currentTab){
-            currentTab.classList.remove("active");
-        }
-        project.classList.add("active");
+        setActive(project);
         renderTasks(projectItem);
     });
 
-    return project
+    return project;
 }
 
-const renderTasks = (mode) => {
-    clearContent(content);
-    const tasks = getTasks();
-    tasks.forEach((task) => {
-        console.log(task.name);
-    });
-
-    const title = createElement("h1", {text: mode.name})
-    const taskList = createElement("div", {classes: ["task-list", "flex-col"]});
-    tasks.forEach((taskItem)=>{
-        if (mode.evaluate(taskItem)){
-            const task = createTask(taskItem, mode);
-            taskList.appendChild(task);
-        }
-    });
-    content.append(title, taskList);
-}
-
-const renderProjects = () => {
-    clearContent(projectList);
-    console.log(projects.toString());
-    projects.forEach((projectItem, index)=>{
-        const project = createProject(projectItem, index);
-        projectList.appendChild(project);
-    });
-    
-    //Add project button
+function createAddProjectButton() {
     const addProjectButton = createElement("button", {classes: ["flex-row"], attributes:{id:"add-project"}});
     const addProjectIcon = createElement("img", {classes: ["icon-small"], attributes: {src: plus, alt: "Add project"}});
     const addProjectText = createElement("span", {text: "Add Project"});
     addProjectButton.append(addProjectIcon,addProjectText);
+
     addProjectButton.addEventListener("click", () => {
-        console.log("Add project button pressed");
         const projName = prompt("Enter the project name");
         if (projName){
             addProject(projName);
@@ -133,16 +161,19 @@ const renderProjects = () => {
         }
     });
 
-    projectList.appendChild(addProjectButton);
+    return addProjectButton;
+}
 
+function renderProjectSelection() {
     const projectSelection = document.getElementById("task-project");
     clearContent(projectSelection);
     projectSelection.appendChild(createElement("option", {text: "Select project", attributes: {value: "", disabled: true, selected: true}}));
     projects.forEach((project) => {
+        console.log(project);
         const option = createElement("option", {text: project.name, attributes: {value: project.name}});
         projectSelection.appendChild(option);
     });
 }
 
-export { renderTasks, renderProjects };
+export { renderTasks, renderProjects, setUpTabs, renderCurrentTab };
 
