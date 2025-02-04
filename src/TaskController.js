@@ -5,12 +5,11 @@ import { compareAsc } from "date-fns";
 const tasks = [];
 const defaultProject = new Project("Default");
 const projects = [defaultProject];
-let counter = 0;
 const priorityMap = {"high": 1, "medium": 2, "low": 3};
 
 const addTask = (name, description, dueDate, priority, projectName) => {
-    const task = new Task(name, description, dueDate, priorityMap[priority], counter);
-    counter++;
+    const id = Math.floor(100*Math.random());
+    const task = new Task(name, description, dueDate, priorityMap[priority], id);
     tasks.push(task);
 
     const projectID = projects.find(p => p.name === projectName).id;
