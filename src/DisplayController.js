@@ -154,6 +154,7 @@ function createProject(projectItem, index){
             e.stopPropagation();
             deleteProject(index);
             renderProjects();
+            renderCurrentTab();
         });
         project.appendChild(deleteButton);
     }
