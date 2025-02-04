@@ -22,10 +22,10 @@ const tabs = [
     }},
 ];
 
-const renderTasks = (mode) => {
+const renderTasks = (mode, view) => {
     clearContent(content);
     const title = createElement("h1", {text: mode.name})
-    const taskList = createElement("div", {classes: ["task-list", "flex-col"]});
+    const taskList = createElement("div", {classes: [view, "flex-col"]});
     tasks.forEach((taskItem)=>{
         if (mode.evaluate(taskItem)){
             const task = createTask(taskItem, mode);
@@ -50,23 +50,42 @@ const setUpTabs = () => {
     tabs.forEach((mode) => {
         const tab = document.getElementById(mode.id);
         tab.addEventListener("click", () => {
-            setActive(tab);
-            renderTasks(mode);
+            setActiveTab(tab);
+            renderTasks(mode, getCurrentView());
         });
+    });
+}
+
+const setUpViewButtons = () => {
+    const viewOptions = document.querySelector(".view-options");
+    viewOptions.addEventListener("click", (e) => {
+        const selectedView = e.target.closest("button");
+        setActiveView(selectedView);
+        renderCurrentTab();
     });
 }
 
 const renderCurrentTab = () => {
     const currentMode = tabs.find(t => t.id === document.querySelector(".active")?.id) || projects.find(p => p.id === document.querySelector(".active")?.id) || tabs[0];
-    renderTasks(currentMode);
+    renderTasks(currentMode, getCurrentView());
 }
 
-function setActive(element) {
+const getCurrentView = () => {
+    return document.querySelector(".active-view").id;
+}
+
+function setActiveTab(element) {
     const currentTab = document.querySelector(".active");
     if (currentTab){
         currentTab.classList.remove("active");
     }
     element.classList.add("active");
+}
+
+function setActiveView(element) {
+    const currentView = document.querySelector(".active-view");
+    currentView.classList.remove("active-view");
+    element.classList.add("active-view");
 }
 
 function clearContent(element) {
@@ -104,7 +123,7 @@ function createCompleteButton(taskItem) {
     return completeButton;
 }
 
-function createTask(taskItem, mode) {
+function createTask(taskItem) {
     const task = createElement("div", {classes: ["task", "flex-row", `priority-${taskItem.priority}`]})
     const completeButton = createCompleteButton(taskItem);
 
@@ -116,7 +135,7 @@ function createTask(taskItem, mode) {
     const deleteButton = createElement("button", {text: "x", attributes: {id: "delete"}});
     deleteButton.addEventListener("click", ()=>{
         deleteTask(taskItem);
-        renderTasks(mode);
+        renderCurrentTab();
     });
 
     task.append(completeButton, taskInfo, deleteButton);
@@ -140,8 +159,8 @@ function createProject(projectItem, index){
     }
 
     project.addEventListener("click", () => {
-        setActive(project);
-        renderTasks(projectItem);
+        setActiveTab(project);
+        renderTasks(projectItem, getCurrentView());
     });
 
     return project;
@@ -175,5 +194,5 @@ function renderProjectSelection() {
     });
 }
 
-export { renderTasks, renderProjects, setUpTabs, renderCurrentTab };
+export { renderTasks, renderProjects, setUpTabs, setUpViewButtons, renderCurrentTab };
 

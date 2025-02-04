@@ -1,7 +1,7 @@
 import "./normalize.css";
 import "./styles.css";
 import { addTask, sort, loadFromLocalStorage, getTasks, getProjects } from "./TaskController.js";
-import { renderTasks, renderProjects, setUpTabs, renderCurrentTab } from "./DisplayController.js";
+import { setUpViewButtons, renderProjects, setUpTabs, renderCurrentTab } from "./DisplayController.js";
 import { parse } from "date-fns";
 
 const addTaskDialog = document.getElementById("add-task-dialog");
@@ -10,7 +10,9 @@ const sortDialog = document.getElementById("sort-dialog");
 document.addEventListener("DOMContentLoaded", () => {
     loadFromLocalStorage();
     setUpTabs();
-    setUpEventListeners();
+    setUpTaskDialog();
+    setUpSortDialog();
+    setUpViewButtons();
 
     renderCurrentTab(); // Start on Today tab
     renderProjects();
@@ -48,17 +50,18 @@ function getTaskDetails() {
     return { name, date, project, priority, description }
 }
 
-function setUpEventListeners(){
+function setUpTaskDialog() {
     const addTaskButton = document.getElementById("add-task");
     const submitTaskButton = document.getElementById("submit-task");
     const closeTaskDialogButton = document.getElementById("close-form");
-    const sortButton = document.getElementById("sort");
-    const sortSelect = document.getElementById("sort-select");
-
     addTaskButton.addEventListener("click", () => addTaskDialog.showModal());
     submitTaskButton.addEventListener("click", (e) => captureTaskDetails(e));
     closeTaskDialogButton.addEventListener("click", (e) => closeDialog(e));
+}
 
+function setUpSortDialog(){
+    const sortButton = document.getElementById("sort");
+    const sortSelect = document.getElementById("sort-select");
     sortButton.addEventListener("click", () => sortDialog.show());
     sortSelect.addEventListener("change", handleSort);
     sortDialog.addEventListener("focusout", () => sortDialog.close());
