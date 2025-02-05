@@ -1,6 +1,6 @@
 import "./normalize.css";
 import "./styles.css";
-import { addTask, sort, loadFromLocalStorage, getTasks, getProjects } from "./TaskController.js";
+import { addTask, sort, loadFromLocalStorage, getTasks } from "./TaskController.js";
 import { setUpViewButtons, renderProjects, setUpTabs, renderCurrentTab } from "./DisplayController.js";
 import { parse } from "date-fns";
 
