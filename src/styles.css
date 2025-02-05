@@ -17,7 +17,7 @@
 /* Layout */
 
 #container {
-    height: 100vh;
+    height: fit-content;
     display: grid;
     grid-template-areas:
         "sidebar header header"
