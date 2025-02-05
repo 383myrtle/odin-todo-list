@@ -9,6 +9,13 @@ const sortDialog = document.getElementById("sort-dialog");
 
 document.addEventListener("DOMContentLoaded", () => {
     loadFromLocalStorage();
+    if (getTasks().length === 0){
+        addTask("Add a new task", "Press the 'Add Task' button in the left sidebar", new Date(Date.now()), "high", "Default");
+        addTask("Add a new project", "Press the 'Add Project' button in the left sidebar" , new Date(Date.now()), "medium", "Default");
+        addTask("Change view", "Choose from list or grid view, or change how tasks are sorted using the buttons in the top right", new Date(Date.now()), "medium", "Default");
+        addTask("Mark a task complete", "Press the check mark on the left of this task, view your completed tasks in the 'Completed' tab", new Date(Date.now()), "high", "Default");
+        addTask("Remove this task", "Press the 'x' button to the right of this task", new Date(Date.now()), "low", "Default");
+    }
     setUpTabs();
     setUpTaskDialog();
     setUpSortDialog();
