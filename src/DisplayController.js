@@ -129,7 +129,7 @@ function createTask(taskItem) {
 
     const taskInfo = createElement("div", {classes: ["task-info"]});
     const taskTitle = createElement("h2", {text: taskItem.name});
-    const taskDescription = createElement("p", {text: `Due: ${format(taskItem.dueDate, 'MMM dd')} · ${taskItem.description}`});
+    const taskDescription = createElement("p", {text: `${format(taskItem.dueDate, 'MMM dd')} · ${taskItem.description}`});
     taskInfo.append(taskTitle, taskDescription);
     
     const deleteButton = createElement("button", {text: "x", attributes: {id: "delete"}});
